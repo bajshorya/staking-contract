@@ -2,18 +2,18 @@
 pragma solidity ^0.8.13;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "./OrcaCoin.sol";
+import "./BarcaCoin.sol";
 
 contract StakingContract {
     mapping(address => uint) public balances;
     mapping(address => uint) public unclaimedRewards;
     mapping(address => uint) public lastUpdatedTime;
     
-    OrcaCoinContract public orcaToken;
-    uint public rewardRate = 1e18; // 1 ORCA per second per ether staked
+    BarcaCoinContract public barcaToken;
+    uint public rewardRate = 1e18; // 1 Barca per second per ether staked
 
-    constructor(address _orcaToken) {
-        orcaToken = OrcaCoinContract(_orcaToken);
+    constructor(address _barcaToken) {
+        barcaToken = BarcaCoinContract(_barcaToken);
     }
 
     function stake() public payable {
@@ -55,7 +55,7 @@ contract StakingContract {
         unclaimedRewards[msg.sender] = 0;
         lastUpdatedTime[msg.sender] = block.timestamp;
         
-        orcaToken.mint(msg.sender, rewardAmount);
+        barcaToken.mint(msg.sender, rewardAmount);
     }
 
     function balanceOf(address _address) public view returns (uint) {

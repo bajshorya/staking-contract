@@ -3,17 +3,17 @@ pragma solidity ^0.8.13;
 
 import "forge-std/Test.sol";
 import "../src/StakingContract.sol";
-import "../src/OrcaCoin.sol";
+import "../src/BarcaCoin.sol";
 
 contract StakingContractTest is Test {
     StakingContract stakingContract;
-    OrcaCoinContract orcaToken;
+    BarcaCoinContract barcaCoin;
     address testUser = 0x09BE7A03977DA2D840C5fEB7C30048a34D3A8c88;
 
     function setUp() public {
-        orcaToken = new OrcaCoinContract(address(this));
-        stakingContract = new StakingContract(address(orcaToken));
-        orcaToken.updateStakingContract(address(stakingContract));
+        barcaCoin = new BarcaCoinContract(address(this));
+        stakingContract = new StakingContract(address(barcaCoin));
+        barcaCoin.updateStakingContract(address(stakingContract));
     }
 
     function testStake() public {
@@ -48,7 +48,7 @@ contract StakingContractTest is Test {
 
         stakingContract.claimRewards();
         assertEq(stakingContract.getReward(address(this)), 0);
-        assertGt(orcaToken.balanceOf(address(this)), 0);
+        assertGt(barcaCoin.balanceOf(address(this)), 0);
     }
 
     function testMultipleStakes() public {
