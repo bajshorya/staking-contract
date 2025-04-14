@@ -1,19 +1,27 @@
-// SPDX-License-Identifier: UNLICENSED
+// SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.13;
 
 import "forge-std/Script.sol";
 import "../src/BarcaCoin.sol";
 import "../src/StakingContract.sol";
 
-contract Deploy is Script {
+contract DeployScript is Script {
     function run() external {
-        vm.startBroadcast();
+        vm.startBroadcast(vm.envUint("PRIVATE_KEY")); // Start broadcasting transactions
 
-        StakingContract staking = new StakingContract(address(0)); // temp zero address
-        BarcaCoinContract orca = new BarcaCoinContract(address(staking));
-        staking = new StakingContract(address(orca));
-        orca.updateStakingContract(address(staking)); // link the correct one
+        // Deploy BarcaCoinContract first
+        BarcaCoinContract barcaCoin = new BarcaCoinContract(address(0)); // Initial staking contract address is 0, will be updated later
 
-        vm.stopBroadcast();
+        // Deploy StakingContract, passing the BarcaCoin address
+        StakingContract stakingContract = new StakingContract(address(barcaCoin));
+
+        // Update the staking contract address in BarcaCoinContract
+        barcaCoin.updateStakingContract(address(stakingContract));
+
+        vm.stopBroadcast(); // Stop broadcasting
+
+        // Log the deployed addresses
+        console.log("BarcaCoinContract deployed at:", address(barcaCoin));
+        console.log("StakingContract deployed at:", address(stakingContract));
     }
 }

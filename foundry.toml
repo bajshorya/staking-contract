@@ -1,2 +1,7 @@
-[profile.ci.fuzz]
-runs = 10_000
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib"]
+
+[rpc_endpoints]
+sepolia = "https://eth-sepolia.g.alchemy.com/v2/kMi-bmeuXd4ALEm4h3upv3omiRUy5hij"  
