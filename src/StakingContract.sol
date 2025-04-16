@@ -29,6 +29,9 @@ contract StakingContract {
         balances[msg.sender] += msg.value;
     }
 
+    function amountStaked(address _address) internal view returns (uint){
+        return balances[_address];
+    }
     function unstake(uint _amount) public {
         require(_amount <= balances[msg.sender], "Insufficient balance");
         
