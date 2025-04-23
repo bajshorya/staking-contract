@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.13;
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "./BarcaCoin.sol";
 
 contract StakingContract {
@@ -10,7 +9,7 @@ contract StakingContract {
     mapping(address => uint) public lastUpdatedTime;
     
     BarcaCoinContract public barcaToken;
-    uint public rewardRate = 1e18; // 1 Barca per second per ether staked
+    uint public rewardRate = 2314814800000; // Adjusted to ~20 BarcaCoins/day for 100 ETH
 
     constructor(address _barcaToken) {
         barcaToken = BarcaCoinContract(_barcaToken);
@@ -29,9 +28,6 @@ contract StakingContract {
         balances[msg.sender] += msg.value;
     }
 
-    function amountStaked(address _address) internal view returns (uint){
-        return balances[_address];
-    }
     function unstake(uint _amount) public {
         require(_amount <= balances[msg.sender], "Insufficient balance");
         
@@ -39,9 +35,9 @@ contract StakingContract {
         lastUpdatedTime[msg.sender] = block.timestamp;
         
         balances[msg.sender] -= _amount;
-        payable(msg.sender).transfer(_amount);
+        (bool success, ) = payable(msg.sender).call{value: _amount}("");
+        require(success, "ETH transfer failed");
     }
-
     function _calculateRewards(address _address) internal view returns (uint) {
         uint timeElapsed = block.timestamp - lastUpdatedTime[_address];
         return (timeElapsed * balances[_address] * rewardRate) / 1 ether;
