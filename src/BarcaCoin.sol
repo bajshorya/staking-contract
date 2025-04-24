@@ -35,7 +35,7 @@ contract BarcaCoinContract is ERC20, ERC20Interface {
     }
 
     function tokenURI() public pure returns (string memory) {
-        return "https://barcacoin.com/metadata.json";
+        return "https://ipfs.io/ipfs/bafkreibb5sdaqnakexzaumhiehl6l67jz7bdsplsuoojxuspl77klyexlq";
     }
 
     // ERC20Interface functions implemented by OpenZeppelin's ERC20
